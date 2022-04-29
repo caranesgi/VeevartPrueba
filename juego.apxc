@@ -1,0 +1,46 @@
+public class juego {
+	integer jugador1 = 0;
+    
+    Map<Integer, Integer> serpientes = new Map<Integer, Integer>(); 
+        serpientes.put(14, 4);
+        serpientes.put(19, 8);
+        serpientes.put(22, 20);
+        serpientes.put(24, 16);
+        //System.debug(serpientes);
+    
+    Map<Integer, Integer> escaleras = new Map<Integer, Integer>(); 
+        escaleras.put(3, 11);
+        escaleras.put(6, 17);
+        escaleras.put(9, 18);
+        escaleras.put(10, 12);
+        //System.debug(escaleras);
+	
+    public Integer jugada(Integer jugador1) {
+ 		Integer dado = Integer.valueof((Math.random() * 6));
+		jugador1 = jugador1 + dado;
+        if (serpientes.containsKey(jugador1) == True){
+        	System.debug('Has caido en una serpiente');
+        	jugador1 = serpientes.get(jugador1);
+        	System.debug('Jugador desciende al cuadro:'+ jugador1);
+        }
+        else if (escaleras.containsKey(jugador1) == True){
+ 			System.debug('Has caido en una escalera');
+        	jugador1 = escaleras.get(jugador1);
+        	System.debug('Jugador sube por escalera al cuadro'+ jugador1);
+        }
+        else {
+        	System.debug('Jugador avanza a cuadro:'+ jugador1);
+    	}
+    	return  jugador1 ;
+  	}
+	
+    public void init(){
+        while(True){
+            jugador = jugada(jugador1);
+            if (jugador >= 25) {
+                System.debug('Game Over');
+            }
+            break;
+        }
+    }
+}
