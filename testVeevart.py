@@ -19,6 +19,7 @@ serpiente = {
 	24: 16,
 }
 
+#Funcion principal
 def jugada(posicion):
 	dado = random.randint(1,6)
 	print("Dado arroja: {}.".format(dado))
