@@ -1,8 +1,10 @@
 import random
 #Diccionario de posiciones escalera
 escaleras = {3: 11, 6: 17, 9: 18, 10: 12}
+print(escaleras)
 #Diccionario de posiciones serpiente
 serpientes = {14: 4, 19: 8, 22: 20, 24: 16}
+print(serpientes)
 #Funcion para recibir el numero de jugadores
 def cantidadJugadores():
     numJugadores = input("Digite el numero de jugadores que van a disputar la partida: ")
@@ -41,6 +43,15 @@ def juego(jugadoresDic, tamano):
         elif jugadoresDic[i] > tamano:
             devolverCuadros = jugadoresDic[i] - tamano
             jugadoresDic[i] = tamano - devolverCuadros
+            print(f"Jugador {i} se paso por {devolverCuadros} cuadros. Volvera al cuadro {jugadoresDic[i]}")
+            if jugadoresDic[i] in escaleras:
+                print("Has caido en una escalera")
+                jugadoresDic[i] = escaleras[jugadoresDic[i]]
+                print(f"Jugador {i} sube por escalera al cuadro: {jugadoresDic[i]}")
+            elif jugadoresDic[i] in serpientes:
+                print("Has caido en una serpiente")
+                jugadoresDic[i] = serpientes[jugadoresDic[i]]
+                print(f"Jugador {i} desciende al cuadro: {jugadoresDic[i]}.")
     print("\n")
 
 def main():
