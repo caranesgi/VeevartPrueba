@@ -1,6 +1,5 @@
 public class jugada {
-
-    public static void init(integer numJugadores, integer anchoTablero, integer altoTablero){
+    public static Integer init(integer numJugadores, integer anchoTablero, integer altoTablero){
          //Diccionario de escaleras
         Map<Integer, Integer> escaleras = new Map<Integer, Integer>(); 
         escaleras.put(3, 11);
@@ -17,19 +16,19 @@ public class jugada {
         System.debug(serpientes);
         //Tamaño del tablero, definido por ancho x alto
         integer tamanoTablero = (anchoTablero * altoTablero);
-        //-------------------------
+       	
         Map<Integer, Integer> dicJugadores = crearJugadores(numJugadores);
-        //integer bandera = juego(dicJugadores, tamanoTablero, escaleras, serpientes);
-        
-        while(True){
-            integer bandera = juego(dicJugadores, tamanoTablero, escaleras, serpientes);
-            if (bandera == 2) {
+        integer bandera;
+        while(bandera != 1){
+            bandera = juego(dicJugadores, tamanoTablero, escaleras, serpientes);
+            if (bandera == 1) {
                 System.debug('Game Over');
-                break;
             }
         }
+        
+        return bandera;
     }
-    
+    //Funcion para recibir el numero de jugadores y crearlos
 	public static Map<Integer, Integer> crearJugadores(integer numJugadores){
         Map<integer, integer> dicJugadores = new Map<integer, integer>();
         for (integer i = 0; i < numJugadores; i++){
@@ -37,9 +36,10 @@ public class jugada {
         }
         return dicJugadores;
 	}
-    
+    //Funcion de juego que manejara los turnos de los jugadores
     public static integer juego(Map<Integer, Integer> dicJugadores, integer cuadroGanador, Map<Integer, Integer> escaleras, Map<Integer, Integer> serpientes){
         integer dado, pos, bandera, devolverCuadros;
+        // Ciclo de manejo de turnos por medio de un diccionario y su key
 		for(integer numPlayer: dicJugadores.keySet()){
 			dado = integer.valueof((Math.random() * 6)+1);
             System.debug('Jugador ' + numPlayer + ' esta en la posicion: ' + dicJugadores.get(numPlayer));
@@ -47,25 +47,32 @@ public class jugada {
             pos = ((Integer) dicJugadores.get(numPlayer)) + dado;
             dicJugadores.put(numPlayer, pos);
             System.debug('Jugador ' + numPlayer + ' ahora esta en la posicion: ' + dicJugadores.get(numPlayer));
+            //	Se evalua si el jugador ha caido en una escalera
             if (escaleras.containsKey(((Integer) dicJugadores.get(numPlayer)))){
             	System.debug('Has caido en una escalera');
                 pos = ((Integer) escaleras.get(((Integer) dicJugadores.get(numPlayer))));
                 dicJugadores.put(numPlayer, pos);
             	System.debug('Jugador ' + numPlayer + ' sube por escalera al cuadro: ' + dicJugadores.get(numPlayer));
             }
+            // Se evalua si el jugador ha caido en una serpiente
             else if (serpientes.containsKey(((Integer) dicJugadores.get(numPlayer)))){
             	System.debug('Has caido en una serpiente');
                 pos = ((Integer) serpientes.get(((Integer) dicJugadores.get(numPlayer))));
                 dicJugadores.put(numPlayer, pos);
             	System.debug('Jugador ' + numPlayer + ' desciende al cuadro: ' + dicJugadores.get(numPlayer));
             }
+            // Si no coincide con i¿ninguna de las anteriores condiciones se muestra se posicion al final del turno
             else {
      	       System.debug('Jugador ' + numPlayer + ' avanzo a cuadro: '+ dicJugadores.get(numPlayer));
             }
+            // Se evalua si el jugador ha caido el cuadro ganador
+        	// Si cae en cuadro ganador se activa la bandera y el jugo termina con un ganador
             if (dicJugadores.get(numPlayer) == (cuadroGanador)){
-                bandera = 2;
+                bandera = 1;
                 return bandera;
             }
+            // Se evalua si el jugador ha caido en un cuadro que supera al ganador
+        	// Si supera al cuadro ganador se resta los cuadros extras con su posicion
             else if (dicJugadores.get(numPlayer) > cuadroGanador){
                 devolverCuadros = ((Integer)dicJugadores.get(numPlayer)) - cuadroGanador;
                 dicJugadores.put(numPlayer, ((cuadroGanador - devolverCuadros)));
