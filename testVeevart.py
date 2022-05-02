@@ -19,35 +19,44 @@ def tamanoTablero():
     tamHorizontal = input("Digite el ancho del tablero: ")
     tamVertical = input("Digite la altura del tablero: ")
     return int(tamHorizontal)*int(tamVertical)
-#Funcion de juego
+#Funcion de juego que manejara los turnos de los jugadores
 def juego(jugadoresDic, tamano):
+    # Ciclo de manejo de turnos por medio de un diccionario y su key
     for i in jugadoresDic:
         dado = random.randint(1,6)
         print(f"Jugador {i} esta en la posicion: {jugadoresDic[i]}")
         print(f"Dado arroja: {dado}.")
         jugadoresDic[i] = jugadoresDic[i] + dado
         print(f"Jugador {i} ahora esta en la posicion: {jugadoresDic[i]}")
+        # Se evalua si el jugador ha caido en una escalera
         if jugadoresDic[i] in escaleras:
             print("Has caido en una escalera")
             jugadoresDic[i] = escaleras[jugadoresDic[i]]
             print(f"Jugador {i} sube por escalera al cuadro: {jugadoresDic[i]}")
+        # Se evalua si el jugador ha caido en una serpiente
         elif jugadoresDic[i] in serpientes:
             print("Has caido en una serpiente")
             jugadoresDic[i] = serpientes[jugadoresDic[i]]
             print(f"Jugador {i} desciende al cuadro: {jugadoresDic[i]}.")
         else:
             print(f"Jugador {i} avanzó al cuadro: {jugadoresDic[i]}.")
+        # Se evalua si el jugador ha caido el cuadro ganador
+        # Si cae en cuadro ganador se activa la bandera y el jugo termina con un ganador
         if jugadoresDic[i] == tamano:
-            bandera = 2
+            bandera = 1
             return bandera
+        # Se evalua si el jugador ha caido en un cuadro que supera al ganador
+        # Si supera al cuadro ganador se resta los cuadros extras con su posicion
         elif jugadoresDic[i] > tamano:
             devolverCuadros = jugadoresDic[i] - tamano
             jugadoresDic[i] = tamano - devolverCuadros
             print(f"Jugador {i} se paso por {devolverCuadros} cuadros. Volvera al cuadro {jugadoresDic[i]}")
+            # Se evalua de nuevo si el jugador ha caido en una escalera debido a que supero el cuadro ganador
             if jugadoresDic[i] in escaleras:
                 print("Has caido en una escalera")
                 jugadoresDic[i] = escaleras[jugadoresDic[i]]
                 print(f"Jugador {i} sube por escalera al cuadro: {jugadoresDic[i]}")
+            # Se evalua de nuevo si el jugador ha caido en una serpiente debido a que supero el cuadro ganador
             elif jugadoresDic[i] in serpientes:
                 print("Has caido en una serpiente")
                 jugadoresDic[i] = serpientes[jugadoresDic[i]]
@@ -60,7 +69,7 @@ def main():
     cantidad = cantidadJugadores()
     while True:
         jugadores = juego(cantidad, tamano)
-        if jugadores == 2:
+        if jugadores == 1:
             print("Fin")
             break
 main()
