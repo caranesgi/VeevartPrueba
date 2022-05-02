@@ -1,46 +1,77 @@
-public class juego {
-	integer jugador1 = 0;
-    
-    Map<Integer, Integer> serpientes = new Map<Integer, Integer>(); 
-        serpientes.put(14, 4);
-        serpientes.put(19, 8);
-        serpientes.put(22, 20);
-        serpientes.put(24, 16);
-        //System.debug(serpientes);
-    
-    Map<Integer, Integer> escaleras = new Map<Integer, Integer>(); 
+public class jugada {
+
+    public static void init(integer numJugadores, integer anchoTablero, integer altoTablero){
+         //Diccionario de escaleras
+        Map<Integer, Integer> escaleras = new Map<Integer, Integer>(); 
         escaleras.put(3, 11);
         escaleras.put(6, 17);
         escaleras.put(9, 18);
         escaleras.put(10, 12);
-        //System.debug(escaleras);
-	
-    public Integer jugada(Integer jugador1) {
- 		Integer dado = Integer.valueof((Math.random() * 6));
-		jugador1 = jugador1 + dado;
-        if (serpientes.containsKey(jugador1) == True){
-        	System.debug('Has caido en una serpiente');
-        	jugador1 = serpientes.get(jugador1);
-        	System.debug('Jugador desciende al cuadro:'+ jugador1);
-        }
-        else if (escaleras.containsKey(jugador1) == True){
- 			System.debug('Has caido en una escalera');
-        	jugador1 = escaleras.get(jugador1);
-        	System.debug('Jugador sube por escalera al cuadro'+ jugador1);
-        }
-        else {
-        	System.debug('Jugador avanza a cuadro:'+ jugador1);
-    	}
-    	return  jugador1 ;
-  	}
-	
-    public void init(){
+        System.debug(escaleras);
+        //Diccionario de serpientes
+        Map<Integer, Integer> serpientes = new Map<Integer, Integer>(); 
+        serpientes.put(14, 4);
+        serpientes.put(19, 8);
+        serpientes.put(22, 20);
+        serpientes.put(24, 16);
+        System.debug(serpientes);
+        //Tamaño del tablero, definido por ancho x alto
+        integer tamanoTablero = (anchoTablero * altoTablero);
+        //-------------------------
+        Map<Integer, Integer> dicJugadores = crearJugadores(numJugadores);
+        //integer bandera = juego(dicJugadores, tamanoTablero, escaleras, serpientes);
+        
         while(True){
-            jugador = jugada(jugador1);
-            if (jugador >= 25) {
+            integer bandera = juego(dicJugadores, tamanoTablero, escaleras, serpientes);
+            if (bandera == 2) {
                 System.debug('Game Over');
+                break;
             }
-            break;
         }
+    }
+    
+	public static Map<Integer, Integer> crearJugadores(integer numJugadores){
+        Map<integer, integer> dicJugadores = new Map<integer, integer>();
+        for (integer i = 0; i < numJugadores; i++){
+            dicJugadores.put(i+1, 0);
+        }
+        return dicJugadores;
+	}
+    
+    public static integer juego(Map<Integer, Integer> dicJugadores, integer cuadroGanador, Map<Integer, Integer> escaleras, Map<Integer, Integer> serpientes){
+        integer dado, pos, bandera, devolverCuadros;
+		for(integer numPlayer: dicJugadores.keySet()){
+			dado = integer.valueof((Math.random() * 6)+1);
+            System.debug('Jugador ' + numPlayer + ' esta en la posicion: ' + dicJugadores.get(numPlayer));
+            System.debug('Dado arroja ' + dado);
+            pos = ((Integer) dicJugadores.get(numPlayer)) + dado;
+            dicJugadores.put(numPlayer, pos);
+            System.debug('Jugador ' + numPlayer + ' ahora esta en la posicion: ' + dicJugadores.get(numPlayer));
+            if (escaleras.containsKey(((Integer) dicJugadores.get(numPlayer)))){
+            	System.debug('Has caido en una escalera');
+                pos = ((Integer) escaleras.get(((Integer) dicJugadores.get(numPlayer))));
+                dicJugadores.put(numPlayer, pos);
+            	System.debug('Jugador ' + numPlayer + ' sube por escalera al cuadro: ' + dicJugadores.get(numPlayer));
+            }
+            else if (serpientes.containsKey(((Integer) dicJugadores.get(numPlayer)))){
+            	System.debug('Has caido en una serpiente');
+                pos = ((Integer) serpientes.get(((Integer) dicJugadores.get(numPlayer))));
+                dicJugadores.put(numPlayer, pos);
+            	System.debug('Jugador ' + numPlayer + ' desciende al cuadro: ' + dicJugadores.get(numPlayer));
+            }
+            else {
+     	       System.debug('Jugador ' + numPlayer + ' avanzo a cuadro: '+ dicJugadores.get(numPlayer));
+            }
+            if (dicJugadores.get(numPlayer) == (cuadroGanador)){
+                bandera = 2;
+                return bandera;
+            }
+            else if (dicJugadores.get(numPlayer) > cuadroGanador){
+                devolverCuadros = ((Integer)dicJugadores.get(numPlayer)) - cuadroGanador;
+                dicJugadores.put(numPlayer, ((cuadroGanador - devolverCuadros)));
+                System.debug('Jugador ' + numPlayer + ' se paso por ' + devolverCuadros + ' cuadros. Volvera a la posicion ' + dicJugadores.get(numPlayer));
+            }
+        }
+        return 0;
     }
 }
